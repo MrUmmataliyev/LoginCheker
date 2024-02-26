@@ -18,4 +18,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LoginChecker.Application\LoginChecker.Application.csproj" />
+    <ProjectReference Include="..\LoginChecker.Infrastructure\LoginChecker.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

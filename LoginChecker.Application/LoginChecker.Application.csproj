@@ -7,13 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Service\Login\" />
-    <Folder Include="Service\Check\" />
-    <Folder Include="Service\Register\" />
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <ProjectReference Include="..\LoginCheker.Domain\LoginChecker.Domain.csproj" />
   </ItemGroup>
 
 </Project>
