@@ -10,9 +10,9 @@ namespace LoginChecker.Application
     {
         public static IServiceCollection AddAplication(this IServiceCollection services)
         {
-            services.AddScoped<ILogin, Login>();
-            services.AddScoped<ICheck, Check>();
-            services.AddScoped<IRegister, Register>();
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<ICheckService, CheckService>();
+            services.AddScoped<IRegisterService, RegisterService>();
             return services;
         }
     }
