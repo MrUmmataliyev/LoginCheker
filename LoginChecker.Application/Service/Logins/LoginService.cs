@@ -37,23 +37,38 @@ namespace LoginChecker.Application.Service.Logins
 
             if (Log.IsCorrect(useremail, password).Result)
             {
-                var userAdd = new EmailCheck
-                {
-                    Email = useremail,
-                    Password= password,
-                    Code = "2270611"
-                   
-                };
+                Random code = new Random();
+                string co = code.Next(100000, 999999).ToString();
+                var checks = await _contex.EmailChecks.ToListAsync();
 
-                await _contex.EmailChecks.AddAsync(userAdd);
-                _contex.SaveChanges();
+                var check = await _contex.EmailChecks.FirstOrDefaultAsync(x => x.Email == useremail);
+                if(check != null)
+                {
+                    check.Code = co;
+                    _contex.SaveChanges();
+                }
+                else
+                {
+                    var userAdd = new EmailCheck
+                    {
+                        Email = useremail,
+                        Password = password,
+                        Code = co
+
+                    };
+
+                    await _contex.EmailChecks.AddAsync(userAdd);
+                    _contex.SaveChanges();
+                }
+
+
                 var emailSettings = _config.GetSection("EmailSettings");
 
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress(emailSettings["Sender"], emailSettings["SenderName"]),
                     Subject = "Code",
-                    Body = userAdd.Code,
+                    Body = co,
                     IsBodyHtml = true,
 
                 };
