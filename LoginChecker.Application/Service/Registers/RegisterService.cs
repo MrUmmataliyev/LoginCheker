@@ -9,6 +9,10 @@ namespace LoginChecker.Application.Service.Registers
     {
         private readonly ApplicationDbContext _context;
 
+        public RegisterService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public async Task<bool> DoesExist(string useremail)
         {
             var emails = await _context.Users.ToListAsync();
@@ -21,7 +25,7 @@ namespace LoginChecker.Application.Service.Registers
 
         public async Task<string> Register(string useremail, string password)
         {
-            RegisterService register = new RegisterService();
+            RegisterService register = new RegisterService(_context);
             if (!register.DoesExist(useremail).Result)
             {
                 var User = new User
@@ -30,6 +34,7 @@ namespace LoginChecker.Application.Service.Registers
                     UserPassword = password
                 };
                 await _context.Users.AddAsync(User);
+                _context.SaveChanges();
                 return "Registered";
             }
             return "Email aready exists";

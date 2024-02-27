@@ -1,12 +1,24 @@
 ﻿
+using LoginChecker.Infrastructure.Persistance;
+using Microsoft.EntityFrameworkCore;
+
 namespace LoginChecker.Application.Service.Check2
 {
     public class CheckService : ICheckService
     {
-
-        public Task<string> CheckAsync(string useremail, string password, string code)
+        private readonly ApplicationDbContext _checkService;
+        public CheckService(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _checkService = context;
+        }
+        public async Task<string> CheckAsync(string useremail, string password, string code)
+        {
+            var res = await _checkService.EmailChecks.ToListAsync();
+            foreach(var user in res)
+            {
+                if (user.Email == useremail && user.Password == password && user.Code == code) return "Welcome to our API";
+            }
+            return "Something went wrong. Please try again";
         }
     }
 }

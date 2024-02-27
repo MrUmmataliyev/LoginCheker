@@ -13,6 +13,13 @@ namespace LoginChecker.Application.Service.Logins
     {
         private readonly ApplicationDbContext _contex;
         private readonly IConfiguration _config;
+        public LoginService(ApplicationDbContext context, IConfiguration configuration)
+        {
+            _config = configuration;
+            _contex = context;
+
+
+        }
 
         public async Task<bool> IsCorrect(string useremail, string password)
         {
@@ -26,7 +33,7 @@ namespace LoginChecker.Application.Service.Logins
 
         public async Task<string> SendMessage(string useremail, string password)
         {
-            var Log = new LoginService();
+            var Log = new LoginService(_contex, _config);
 
             if (Log.IsCorrect(useremail, password).Result)
             {
@@ -39,6 +46,7 @@ namespace LoginChecker.Application.Service.Logins
                 };
 
                 await _contex.EmailChecks.AddAsync(userAdd);
+                _contex.SaveChanges();
                 var emailSettings = _config.GetSection("EmailSettings");
 
                 var mailMessage = new MailMessage
@@ -63,6 +71,7 @@ namespace LoginChecker.Application.Service.Logins
                 
 
                 await smtpClient.SendMailAsync(mailMessage);
+                return "We sent a code. Please go to check and confirm it!";
             }
             return "Something went wrong try again";
         }
