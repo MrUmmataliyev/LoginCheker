@@ -11,7 +11,7 @@ namespace LoginChecker.Infrastructure.Persistance
         {
             Database.Migrate();
         }
-        public virtual DbSet<EmailCheck> EmailChecks { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public  DbSet<EmailCheck> EmailChecks { get; set; }
+        public  DbSet<User> Users { get; set; }
     }
 }
